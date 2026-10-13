@@ -21,8 +21,11 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "OHGO — Human-Controlled Agent Runtime",
-  description:
-    "OHGO enforces structural execution boundaries across your codebase. Models are untrusted proposal engines.",
+  // Directory-listing metadata (renders as <meta name="..."> tags), not
+  // HTTP wire headers — no runtime code field carries category/description
+  // on the wire.
+  category: "agent runtime",
+  description: "HUMAN-CONTROLLED AGENT RUNTIME FOR REAL CODEBASES",
   metadataBase: new URL("https://ohgo.dev"),
   icons: {
     icon: `${BASE_PATH}/ohgo-logo.svg`,
