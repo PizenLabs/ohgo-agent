@@ -75,6 +75,13 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
+        env:
+          # Project Pages serves under /<repo>; this feeds both `basePath` in
+          # next.config.mjs and `BASE_PATH` in lib/base-path.ts so `next/image`
+          # src and metadata icons resolve to /ohgo-web/... instead of /...
+          NEXT_PUBLIC_BASE_PATH: /ohgo-web
+      - name: Add .nojekyll (keep _next servable on Pages)
+        run: touch ./out/.nojekyll
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

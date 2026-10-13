@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useCallback, useState } from "react";
+import { BASE_PATH } from "@/lib/base-path";
 import { WORKSPACE_DATA, WORKSPACE_KEYS, type WorkspaceKey } from "@/lib/workspace";
 import TerminalSimulator from "./TerminalSimulator";
 import ArchFlow from "./ArchFlow";
@@ -43,12 +44,12 @@ export default function HomeClient() {
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <Image
-              src="/ohgo-logo-pixel.svg"
+              src={`${BASE_PATH}/ohgo-logo-pixel.svg`}
               alt="OHGO logo"
               width={48}
               height={32}
               className="pixelated logo-float-mini"
-              priority
+              preload
             />
             <div>
               <a href="#" className="font-pixel text-2xl tracking-wider text-white flex items-center gap-2">
@@ -151,12 +152,12 @@ export default function HomeClient() {
 
               <div className="my-6 relative flex justify-center items-center">
                 <Image
-                  src="/ohgo-logo-pixel.svg"
+                  src={`${BASE_PATH}/ohgo-logo-pixel.svg`}
                   alt="OHGO pixel logo"
                   width={330}
                   height={220}
                   className="pixelated logo-float h-auto w-full max-w-[330px]"
-                  priority
+                  preload
                 />
               </div>
 

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { VT323, JetBrains_Mono } from "next/font/google";
+import { BASE_PATH } from "@/lib/base-path";
 import "./globals.css";
 
 // next/font: self-hosted, zero render-blocking Google Fonts requests.
@@ -24,8 +25,8 @@ export const metadata: Metadata = {
     "OHGO enforces structural execution boundaries across your codebase. Models are untrusted proposal engines.",
   metadataBase: new URL("https://ohgo.dev"),
   icons: {
-    icon: "/ohgo-logo.svg",
-    apple: "/ohgo-logo.svg",
+    icon: `${BASE_PATH}/ohgo-logo.svg`,
+    apple: `${BASE_PATH}/ohgo-logo.svg`,
   },
 };
 
