@@ -40,7 +40,17 @@ export default function RootLayout({
     // accessibility tools) commonly append classes to <html> before React
     // hydrates. Server output is byte-deterministic (verified); any residual
     // diff here is third-party DOM mutation, not app content.
-    <html lang="en" className={`${vt323.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
+    // data-theme defaults to dark; the inline script corrects it pre-paint
+    // from localStorage / prefers-color-scheme to avoid a theme flash.
+    // suppressHydrationWarning on <html> also covers that pre-paint rewrite.
+    <html lang="en" data-theme="dark" className={`${vt323.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('ohgo-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme='dark';}})();`,
+          }}
+        />
+      </head>
       <body>{children}</body>
     </html>
   );

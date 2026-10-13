@@ -57,7 +57,7 @@ function ArchFlow() {
 
   return (
     <div className="pixel-box p-6 bg-panel-dark space-y-6">
-      <div className="text-xs font-mono text-gray-400 uppercase tracking-wider mb-2">
+      <div className="text-xs font-mono text-[var(--app-muted)] uppercase tracking-wider mb-2">
         Canonical Loop &amp; Artifact Flow:
       </div>
 
@@ -74,8 +74,8 @@ function ArchFlow() {
             <div className={`${s.color} font-bold font-pixel text-xl mb-1 text-center`}>
               {s.n}. {s.label}
             </div>
-            <div className="text-gray-300 font-semibold mb-2 text-center">{s.sub}</div>
-            <div className="text-[10px] text-gray-400 bg-panel-dark p-2 border border-border-pixel text-center">
+            <div className="text-[var(--app-muted)] font-semibold mb-2 text-center">{s.sub}</div>
+            <div className="text-[10px] text-[var(--app-faint)] bg-panel-dark p-2 border border-border-pixel text-center">
               Produces Artifact:<br />
               <span className={`${s.color} font-bold`}>{s.artifact}</span>
             </div>
@@ -87,7 +87,7 @@ function ArchFlow() {
         <div className="text-pixel-amber font-semibold">
           {detail ? detail.title : "ARTIFACT HANDOFF CONTRACT"}
         </div>
-        <div className="text-gray-300 leading-relaxed">
+        <div className="text-[var(--app-muted)] leading-relaxed">
           {detail
             ? detail.body
             : "Click on any architecture step above to inspect how structured artifacts bridge boundaries without passing implicit write authority across workspaces."}

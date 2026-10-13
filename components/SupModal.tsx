@@ -73,17 +73,17 @@ function SupModal({ open, initialQuery, onClose }: Props) {
             <span className="w-2.5 h-2.5 bg-pixel-amber animate-ping" />
             <span className="font-pixel text-2xl text-pixel-amber tracking-wider">$sup — EPHEMERAL SUPPORT SURFACE</span>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-white font-mono text-sm px-2" aria-label="Close support modal">
+          <button onClick={onClose} className="text-[var(--app-faint)] hover:text-[var(--app-ink)] font-mono text-sm px-2" aria-label="Close support modal">
             ESC [X]
           </button>
         </div>
 
-        <div className="text-xs font-mono text-gray-400 bg-bg-dark p-3 border border-border-pixel space-y-1">
+        <div className="text-xs font-mono text-[var(--app-muted)] bg-bg-dark p-3 border border-border-pixel space-y-1">
           <div><span className="text-pixel-amber">&gt; $sup</span> Transient reference query layer</div>
-          <div className="text-[11px] text-gray-500">Invariant I17: Does not pollute main session context, create tasks, or mutate workspace authority.</div>
+          <div className="text-[11px] text-[var(--app-faint)]">Invariant I17: Does not pollute main session context, create tasks, or mutate workspace authority.</div>
         </div>
 
-        <div ref={boxRef} className="h-40 overflow-y-auto bg-[#0a0d12] p-3 border border-border-pixel font-mono text-xs space-y-2 text-gray-300">
+        <div ref={boxRef} className="terminal-dark h-40 overflow-y-auto p-3 border border-border-pixel font-mono text-xs space-y-2 text-gray-300">
           {entries.length === 0 && (
             <div className="text-gray-500">// Type a quick question below (e.g. &quot;What is Go AST search?&quot;, &quot;Explain model fallback&quot;)</div>
           )}
@@ -100,7 +100,7 @@ function SupModal({ open, initialQuery, onClose }: Props) {
           <input
             ref={inputRef}
             type="text"
-            className="flex-grow bg-bg-dark border border-border-pixel p-2 text-xs font-mono text-white focus:border-pixel-amber focus:outline-none"
+            className="flex-grow bg-bg-dark border border-border-pixel p-2 text-xs font-mono text-[var(--app-ink)] placeholder:text-[var(--app-faint)] focus:border-pixel-amber focus:outline-none"
             placeholder="Ask $sup a reference question..."
             autoComplete="off"
             aria-label="$sup question input"

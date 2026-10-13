@@ -120,36 +120,36 @@ function TerminalSimulator({ workspace, onSupQuery, externalLog = null }: Props)
           <span className="w-3 h-3 bg-red-500 rounded-none inline-block border border-red-700" />
           <span className="w-3 h-3 bg-yellow-500 rounded-none inline-block border border-yellow-700" />
           <span className="w-3 h-3 bg-green-500 rounded-none inline-block border border-green-700" />
-          <span className="text-xs font-mono text-gray-400 ml-2">
+          <span className="text-xs font-mono text-[var(--app-faint)] ml-2">
             ohgo-repl — workspace::{data.headerWs}
           </span>
         </div>
-        <div className="text-[10px] font-mono text-gray-500 hidden sm:block">
+        <div className="text-[10px] font-mono text-[var(--app-faint)] hidden sm:block">
           PERSISTENCE: ~/.ohgo/sessions.db
         </div>
       </div>
 
-      <div ref={bodyRef} className="p-4 h-80 overflow-y-auto font-mono text-xs space-y-3 bg-[#0a0d12]">
+      <div ref={bodyRef} className="terminal-dark p-4 h-80 overflow-y-auto font-mono text-xs space-y-3">
         {lines.map((l) => (
           <LogRow key={l.id} line={l} />
         ))}
       </div>
 
       <div className="px-4 py-2 bg-panel-dark/80 border-t border-border-pixel flex flex-wrap items-center gap-2 text-xs">
-        <span className="text-gray-500 font-mono text-[10px]">PRESETS:</span>
-        <button onClick={() => run("read internal/runtime.go")} className="px-2 py-1 bg-bg-dark text-gray-300 hover:text-white border border-border-pixel text-[11px]">
+        <span className="text-[var(--app-faint)] font-mono text-[10px]">PRESETS:</span>
+        <button onClick={() => run("read internal/runtime.go")} className="px-2 py-1 bg-bg-dark text-[var(--app-muted)] hover:text-[var(--app-ink)] border border-border-pixel text-[11px]">
           Read Code
         </button>
-        <button onClick={() => run("edit main.go")} className="px-2 py-1 bg-bg-dark text-fuzz-magenta hover:text-white border border-fuzz-magenta/40 text-[11px]">
+        <button onClick={() => run("edit main.go")} className="px-2 py-1 bg-bg-dark text-fuzz-magenta hover:text-[var(--app-ink)] border border-fuzz-magenta/40 text-[11px]">
           Mutate File
         </button>
-        <button onClick={() => run("go test -race ./...")} className="px-2 py-1 bg-bg-dark text-ask-teal hover:text-white border border-ask-teal/40 text-[11px]">
+        <button onClick={() => run("go test -race ./...")} className="px-2 py-1 bg-bg-dark text-ask-teal hover:text-[var(--app-ink)] border border-ask-teal/40 text-[11px]">
           Run Race Test
         </button>
-        <button onClick={() => run("$sup What is authority boundary?")} className="px-2 py-1 bg-bg-dark text-pixel-amber hover:text-white border border-pixel-amber/40 text-[11px]">
+        <button onClick={() => run("$sup What is authority boundary?")} className="px-2 py-1 bg-bg-dark text-pixel-amber hover:text-[var(--app-ink)] border border-pixel-amber/40 text-[11px]">
           $sup Prompt
         </button>
-        <button onClick={clear} className="ml-auto px-2 py-1 text-gray-500 hover:text-gray-300 text-[10px]">
+        <button onClick={clear} className="ml-auto px-2 py-1 text-[var(--app-faint)] hover:text-[var(--app-muted)] text-[10px]">
           CLEAR
         </button>
       </div>
@@ -161,7 +161,7 @@ function TerminalSimulator({ workspace, onSupQuery, externalLog = null }: Props)
         <input
           ref={inputRef}
           type="text"
-          className="flex-grow bg-transparent text-white font-mono text-xs focus:outline-none"
+          className="flex-grow bg-transparent text-[var(--app-ink)] font-mono text-xs focus:outline-none placeholder:text-[var(--app-faint)]"
           placeholder="Enter tool command or query (e.g. edit foo.go, read main.go)..."
           autoComplete="off"
           aria-label="Terminal command input"

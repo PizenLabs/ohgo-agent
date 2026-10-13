@@ -16,8 +16,43 @@
   --font-mono: "JetBrains Mono", monospace;
 }
 
-:root {
+/* Semantic app surfaces. Dark is the default; light overrides below.
+   Tailwind v4 theme utilities (bg-panel-dark, bg-bg-dark,
+   border-border-pixel) compile to var(--color-*) references, so remapping
+   those vars here flips the whole chrome without touching components. */
+:root,
+[data-theme="dark"] {
+  --app-bg: #0d1117;
+  --app-panel: #161b22;
+  --app-panel-2: #21262d;
+  --app-border: #30363d;
+  --app-ink: #f0f6fc;
+  --app-muted: #c9d1d9;
+  --app-faint: #8b949e;
+  --app-shadow: #010409;
+  --app-inset-hi: #21262d;
+  --app-grid: rgba(48, 54, 61, 0.2);
   --active-accent: #2dd4bf;
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --app-bg: #eef1f5;
+  --app-panel: #ffffff;
+  --app-panel-2: #e6ebf1;
+  --app-border: #c9d1d9;
+  --app-ink: #0d1117;
+  --app-muted: #2d333b;
+  --app-faint: #57606a;
+  --app-shadow: rgba(13, 17, 23, 0.25);
+  --app-inset-hi: #f6f8fa;
+  --app-grid: rgba(13, 17, 23, 0.08);
+  color-scheme: light;
+
+  /* Remap Tailwind theme vars so existing theme utilities adapt. */
+  --color-bg-dark: #eef1f5;
+  --color-panel-dark: #ffffff;
+  --color-border-pixel: #c9d1d9;
 }
 
 html {
@@ -25,11 +60,19 @@ html {
 }
 
 body {
-  background-color: #0d1117;
-  color: #c9d1d9;
+  background-color: var(--app-bg);
+  color: var(--app-muted);
   font-family: "JetBrains Mono", monospace;
   image-rendering: pixelated;
   overflow-x: hidden;
+}
+
+/* Smooth theme cross-fade on chrome only (not on animated brand layers). */
+body,
+.pixel-box,
+header,
+footer {
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
 }
 
 /* Scanline overlay: single fixed layer, compositor-friendly.
@@ -48,14 +91,18 @@ body {
   contain: strict;
 }
 
-/* Pixel borders & shadows — unchanged visual logic */
+[data-theme="light"] .scanlines {
+  opacity: 0.18;
+}
+
+/* Pixel borders & shadows — surface colors follow the active theme */
 .pixel-box {
-  background-color: #161b22;
-  border: 2px solid #30363d;
+  background-color: var(--app-panel);
+  border: 2px solid var(--app-border);
   box-shadow:
-    4px 4px 0px 0px #010409,
-    inset -2px -2px 0px 0px #010409,
-    inset 2px 2px 0px 0px #21262d;
+    4px 4px 0px 0px var(--app-shadow),
+    inset -2px -2px 0px 0px var(--app-shadow),
+    inset 2px 2px 0px 0px var(--app-inset-hi);
   position: relative;
 }
 
@@ -68,9 +115,9 @@ body {
 .pixel-box-interactive:hover {
   transform: translate(-2px, -2px);
   box-shadow:
-    6px 6px 0px 0px #010409,
-    inset -2px -2px 0px 0px #010409,
-    inset 2px 2px 0px 0px #30363d;
+    6px 6px 0px 0px var(--app-shadow),
+    inset -2px -2px 0px 0px var(--app-shadow),
+    inset 2px 2px 0px 0px var(--app-border);
 }
 
 .pixel-btn {
@@ -82,17 +129,17 @@ body {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   padding: 0.4rem 1rem;
-  border: 2px solid #30363d;
-  background: #21262d;
-  color: #f0f6fc;
+  border: 2px solid var(--app-border);
+  background: var(--app-panel-2);
+  color: var(--app-ink);
   cursor: pointer;
   user-select: none;
-  box-shadow: 2px 2px 0px 0px #000;
+  box-shadow: 2px 2px 0px 0px var(--app-shadow);
 }
 
 .pixel-btn:active {
   transform: translate(2px, 2px);
-  box-shadow: 0px 0px 0px 0px #000;
+  box-shadow: 0px 0px 0px 0px var(--app-shadow);
 }
 
 .pixel-btn-ask {
@@ -133,15 +180,15 @@ body {
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #0d1117;
-  border-left: 1px solid #30363d;
+  background: var(--app-bg);
+  border-left: 1px solid var(--app-border);
 }
 ::-webkit-scrollbar-thumb {
-  background: #30363d;
-  border: 1px solid #21262d;
+  background: var(--app-border);
+  border: 1px solid var(--app-panel-2);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #484f58;
+  background: var(--app-faint);
 }
 
 .glow-ask {
@@ -177,8 +224,8 @@ body {
 .pixel-grid-bg {
   background-size: 32px 32px;
   background-image:
-    linear-gradient(to right, rgba(48, 54, 61, 0.2) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(48, 54, 61, 0.2) 1px, transparent 1px);
+    linear-gradient(to right, var(--app-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--app-grid) 1px, transparent 1px);
 }
 
 /* Crisp pixels without GPU smoothing cost.
@@ -228,13 +275,156 @@ canvas.pixelated {
   will-change: transform;
 }
 
+/* ---- Animated brand mark -------------------------------------------
+   Layered so each element animates exactly one property:
+   .brand-float  → transform drift (keyframes above, compositor-only)
+   .brand-blink  → slow scaleY squash emulating a blink
+   .brand-glow   → accent-tinted drop-shadow pulse (filter)
+   .brand-shine  → diagonal light sweep, clipped to the mark
+   .brand-word   → per-letter idle wave on the OHGO wordmark                */
+.brand {
+  --brand-accent: var(--active-accent);
+  display: inline-flex;
+}
+
+.brand-float {
+  display: inline-flex;
+}
+
+.brand-blink {
+  position: relative;
+  display: inline-flex;
+  overflow: hidden;
+  animation: brand-blink 4.6s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes brand-blink {
+  0%,
+  91%,
+  100% {
+    transform: scaleY(1);
+  }
+  94% {
+    transform: scaleY(0.9);
+  }
+  97% {
+    transform: scaleY(1);
+  }
+}
+
+.brand-glow {
+  animation: brand-glow 3.2s ease-in-out infinite;
+  will-change: filter;
+}
+
+@keyframes brand-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 3px var(--brand-accent));
+  }
+  50% {
+    filter: drop-shadow(0 0 14px var(--brand-accent));
+  }
+}
+
+[data-theme="light"] .brand-glow {
+  animation-name: brand-glow-light;
+}
+
+@keyframes brand-glow-light {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 2px var(--brand-accent));
+  }
+  50% {
+    filter: drop-shadow(0 0 9px var(--brand-accent));
+  }
+}
+
+.brand-shine {
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: 0;
+  width: 28%;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 100%
+  );
+  mix-blend-mode: screen;
+  transform: translateX(-160%) skewX(-18deg);
+  animation: brand-shine 4.6s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes brand-shine {
+  0%,
+  55% {
+    transform: translateX(-160%) skewX(-18deg);
+    opacity: 0;
+  }
+  62% {
+    opacity: 1;
+  }
+  85%,
+  100% {
+    transform: translateX(480%) skewX(-18deg);
+    opacity: 0;
+  }
+}
+
+.brand-word {
+  display: inline-flex;
+}
+
+.brand-word > span {
+  display: inline-block;
+  animation: brand-letter 3.2s ease-in-out infinite;
+  will-change: transform;
+}
+
+.brand-word > span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.brand-word > span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.brand-word > span:nth-child(4) {
+  animation-delay: 0.45s;
+}
+
+@keyframes brand-letter {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+/* Terminal + $sup log surfaces stay dark in both themes (editor-style
+   contrast for code). Scoped via color-scheme, not global text overrides. */
+.terminal-dark {
+  background-color: #0a0d12;
+  color-scheme: dark;
+}
+
 /* Respect reduced-motion users */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
   .logo-float,
-  .logo-float-mini {
+  .logo-float-mini,
+  .brand-blink,
+  .brand-glow,
+  .brand-shine,
+  .brand-word > span {
     animation: none;
   }
 }
