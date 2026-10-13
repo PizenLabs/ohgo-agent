@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useCallback, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useState, type CSSProperties } from "react";
 import { WORKSPACE_DATA, WORKSPACE_KEYS, type WorkspaceKey } from "@/lib/workspace";
 import TerminalSimulator from "./TerminalSimulator";
 import ArchFlow from "./ArchFlow";
@@ -21,6 +21,14 @@ export default function HomeClient() {
   const [workspace, setWorkspace] = useState<WorkspaceKey>("ASK");
   const [supOpen, setSupOpen] = useState(false);
   const [supQuery, setSupQuery] = useState("");
+  // Manual motion override (hero MOTION toggle). Initialized to the SSR value
+  // (ON) to avoid a hydration mismatch, then synced post-hydration from the
+  // pre-paint html[data-motion] value set in layout (stored pref, else OS
+  // prefers-reduced-motion). Lets users force motion on/off regardless of OS.
+  const [motionOn, setMotionOn] = useState(true);
+  useEffect(() => {
+    setMotionOn(document.documentElement.dataset.motion !== "off");
+  }, []);
   const data = WORKSPACE_DATA[workspace];
 
   const switchWorkspace = useCallback((ws: WorkspaceKey) => setWorkspace(ws), []);
@@ -29,6 +37,18 @@ export default function HomeClient() {
     setSupOpen(true);
   }, []);
   const closeSup = useCallback(() => setSupOpen(false), []);
+  const toggleMotion = useCallback(() => {
+    setMotionOn((prev) => {
+      const next = !prev;
+      try {
+        document.documentElement.dataset.motion = next ? "on" : "off";
+        localStorage.setItem("ohgo-motion", next ? "on" : "off");
+      } catch {
+        /* storage unavailable (private mode) — attr still applies */
+      }
+      return next;
+    });
+  }, []);
   const onSupQuery = useCallback(
     (q: string) => {
       openSup(q);
@@ -149,7 +169,14 @@ export default function HomeClient() {
                 OHGO_{workspace}
               </div>
 
-              <div className="my-6 relative flex justify-center items-center">
+              <div className="my-6 relative flex justify-center items-center w-full">
+                <div className="brand-water" aria-hidden>
+                  <i />
+                  <i />
+                  <i />
+                  <i />
+                  <i />
+                </div>
                 <LogoBrand variant="hero" accent={data.color} />
               </div>
 
@@ -158,9 +185,19 @@ export default function HomeClient() {
                 <p className="text-xs text-[var(--app-muted)]">{data.statusDesc}</p>
               </div>
 
-              <div className="mt-4 w-full flex justify-between items-center text-[10px] font-mono text-[var(--app-faint)] pt-3 border-t border-border-pixel/50">
-                <span>LOGO: <span className="text-[var(--app-muted)]">FLOAT // GLOW // BLINK</span></span>
-                <span>AUTHORITY: <span style={{ color: data.color }}>{workspace}</span></span>
+              <div className="mt-4 w-full flex flex-wrap gap-2 justify-between items-center text-[10px] font-mono text-[var(--app-faint)] pt-3 border-t border-border-pixel/50">
+                <span>LOGO: <span className="text-[var(--app-muted)]">BOUNCE // WATER // SWIM</span></span>
+                <span className="flex items-center gap-2">
+                  <span>AUTHORITY: <span style={{ color: data.color }}>{workspace}</span></span>
+                  <button
+                    onClick={toggleMotion}
+                    aria-pressed={motionOn}
+                    title="Toggle brand motion (overrides OS reduced-motion)"
+                    className="px-1.5 py-0.5 bg-bg-dark border border-border-pixel text-[var(--app-muted)] hover:text-[var(--app-ink)]"
+                  >
+                    MOTION: {motionOn ? "ON" : "OFF"}
+                  </button>
+                </span>
               </div>
             </div>
           </div>

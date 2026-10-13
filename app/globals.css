@@ -236,52 +236,77 @@ canvas.pixelated {
   image-rendering: pixelated;
 }
 
-/* Pufferfish brand drift: slow bob + side sway + slight tilt.
+/* Pufferfish bounce: buoyant up-and-down motion with subtle spring squash.
    Compositor-only transform, no layout thrash. Brand mark stays fixed
    (no workspace tint); motion is decorative only. */
+@keyframes logo-bounce {
+  0%,
+  100% {
+    transform: translateY(0) scale(1.02, 0.98) rotate(-1deg);
+    animation-timing-function: cubic-bezier(0.33, 0, 0.66, 0.33);
+  }
+  45% {
+    transform: translateY(-30px) scale(0.98, 1.02) rotate(1.5deg);
+    animation-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+  }
+  90% {
+    transform: translateY(2px) scale(1.04, 0.96) rotate(-0.5deg);
+  }
+}
+
+.logo-bounce {
+  animation: logo-bounce 1.8s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Pufferfish brand drift: slow bob + side sway + slight tilt. */
 @keyframes logo-float {
   0%,
   100% {
-    transform: translate(0, -8px) rotate(-3deg);
+    transform: translate(0, -7px) rotate(-2.2deg);
   }
-  25% {
-    transform: translate(10px, -3px) rotate(2deg);
+  30% {
+    transform: translate(8px, -2px) rotate(1.4deg);
   }
-  50% {
-    transform: translate(0, 8px) rotate(3deg);
+  55% {
+    transform: translate(2px, 7px) rotate(2.4deg);
   }
-  75% {
-    transform: translate(-10px, -2px) rotate(-2deg);
+  80% {
+    transform: translate(-8px, -1px) rotate(-1.6deg);
   }
 }
 
 @keyframes logo-float-mini {
   0%,
   100% {
-    transform: translate(0, -2px) rotate(-1.5deg);
+    transform: translate(0, -1.6px) rotate(-1deg);
   }
   50% {
-    transform: translate(0, 2px) rotate(1.5deg);
+    transform: translate(0, 1.6px) rotate(1deg);
   }
 }
 
 .logo-float {
-  animation: logo-float 5s ease-in-out infinite;
+  animation: logo-float 7s cubic-bezier(0.45, 0.05, 0.35, 1) infinite;
   will-change: transform;
 }
 
 .logo-float-mini {
-  animation: logo-float-mini 3.5s ease-in-out infinite;
+  animation: logo-float-mini 4s ease-in-out infinite;
   will-change: transform;
 }
 
 /* ---- Animated brand mark -------------------------------------------
    Layered so each element animates exactly one property:
-   .brand-float  → transform drift (keyframes above, compositor-only)
-   .brand-blink  → slow scaleY squash emulating a blink
-   .brand-glow   → accent-tinted drop-shadow pulse (filter)
-   .brand-shine  → diagonal light sweep, clipped to the mark
-   .brand-word   → per-letter idle wave on the OHGO wordmark                */
+   .brand-float   → slow positional drift (keyframes above, compositor-only)
+   .brand-swim    → fast tail-wag shimmy (rotate/skew, tail-side origin)
+   .brand-breathe → slow belly breathe (subtle scale, replaces whole-fish squash)
+   .brand-glow    → accent-tinted drop-shadow pulse (filter)
+   .brand-shine   → diagonal light sweep, clipped to the mark
+   .brand-bubbles → pixel bubbles rising from the mouth (hero only)
+   .brand-word    → per-letter idle wave on the OHGO wordmark
+   Periods are co-prime-ish (7s / 2.2s / 3.4s / 4.2s) so layers never
+   pulse in lockstep. Mini header keeps drift+glow only for calm chrome. */
 .brand {
   --brand-accent: var(--active-accent);
   display: inline-flex;
@@ -291,30 +316,63 @@ canvas.pixelated {
   display: inline-flex;
 }
 
-.brand-blink {
-  position: relative;
+.brand-swim {
   display: inline-flex;
-  overflow: hidden;
-  animation: brand-blink 4.6s ease-in-out infinite;
+  transform-origin: 18% 55%;
+  animation: brand-swim 2.2s ease-in-out infinite;
   will-change: transform;
 }
 
-@keyframes brand-blink {
+@keyframes brand-swim {
   0%,
-  91%,
   100% {
-    transform: scaleY(1);
+    transform: rotate(0deg) skewX(0deg) scaleX(1);
   }
-  94% {
-    transform: scaleY(0.9);
+  25% {
+    transform: rotate(-0.9deg) skewX(1.4deg) scaleX(0.994);
   }
-  97% {
-    transform: scaleY(1);
+  50% {
+    transform: rotate(0.7deg) skewX(-1.6deg) scaleX(1.008);
+  }
+  75% {
+    transform: rotate(-0.5deg) skewX(0.9deg) scaleX(0.998);
+  }
+}
+
+.brand-breathe {
+  position: relative;
+  display: inline-flex;
+  overflow: hidden;
+  animation: brand-breathe 3.4s ease-in-out infinite;
+  will-change: transform;
+}
+
+.brand-breathe-static {
+  position: relative;
+  display: inline-flex;
+  overflow: hidden;
+  animation: none;
+}
+
+@keyframes brand-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.018);
+  }
+}
+
+/* Hover excitement: fish swims faster under the cursor. */
+@media (hover: hover) {
+  .brand:hover .brand-swim {
+    animation-duration: 0.9s;
   }
 }
 
 .brand-glow {
-  animation: brand-glow 3.2s ease-in-out infinite;
+  animation: brand-glow 4.2s ease-in-out infinite;
   will-change: filter;
 }
 
@@ -324,7 +382,7 @@ canvas.pixelated {
     filter: drop-shadow(0 0 3px var(--brand-accent));
   }
   50% {
-    filter: drop-shadow(0 0 14px var(--brand-accent));
+    filter: drop-shadow(0 0 10px var(--brand-accent));
   }
 }
 
@@ -377,6 +435,134 @@ canvas.pixelated {
   }
 }
 
+/* Pixel bubbles rising from the mouth (hero only). Each <i> is a 4px
+   square; transform + opacity only so it stays on the compositor. */
+.brand-bubbles {
+  position: absolute;
+  left: 78%;
+  top: 52%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.brand-bubbles > i {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--brand-accent);
+  opacity: 0;
+  animation: brand-bubble 2.8s linear infinite;
+  will-change: transform, opacity;
+}
+
+.brand-bubbles > i:nth-child(2) {
+  animation-delay: 0.9s;
+  width: 3px;
+  height: 3px;
+}
+
+.brand-bubbles > i:nth-child(3) {
+  animation-delay: 1.8s;
+  width: 5px;
+  height: 5px;
+}
+
+@keyframes brand-bubble {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(10px, -30px);
+    opacity: 0;
+  }
+}
+
+/* Flowing water: pixel current lines drifting past the hero fish (right-side
+   card only, behind the mark). 6px dash / 12px gap = 18px period; -36px
+   travel is exactly 2 periods so the loop wraps seamlessly. Leftward flow
+   reads as the right-facing fish swimming forward. Transform-only. */
+.brand-water {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.brand-water > i {
+  position: absolute;
+  left: -48px;
+  right: -48px;
+  height: 8px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--active-accent) 0 8px,
+    transparent 8px 26px
+  );
+  opacity: 0.32;
+  animation: brand-water-flow 3.2s linear infinite;
+  will-change: transform;
+}
+
+.brand-water > i:first-child {
+  top: 20%;
+}
+
+.brand-water > i:nth-child(2) {
+  top: 32%;
+  height: 6px;
+  opacity: 0.24;
+  animation-duration: 4.3s;
+}
+
+.brand-water > i:nth-child(3) {
+  top: 45%;
+  height: 10px;
+  opacity: 0.18;
+  animation-duration: 5.4s;
+}
+
+.brand-water > i:nth-child(4) {
+  top: 58%;
+  height: 6px;
+  opacity: 0.24;
+  animation-duration: 3.8s;
+  animation-delay: -1.2s;
+}
+
+.brand-water > i:nth-child(5) {
+  top: 69%;
+  height: 8px;
+  opacity: 0.3;
+  animation-duration: 4.9s;
+  animation-delay: -2.5s;
+}
+
+/* 26px dash period; -52px travel = exactly 2 periods so the loop wraps
+   seamlessly. The ±3px vertical wobble rides along, giving a wave-like
+   undulation instead of a rigid slide. */
+@keyframes brand-water-flow {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-13px, -3px);
+  }
+  50% {
+    transform: translate(-26px, 0);
+  }
+  75% {
+    transform: translate(-39px, 3px);
+  }
+  100% {
+    transform: translate(-52px, 0);
+  }
+}
+
 .brand-word {
   display: inline-flex;
 }
@@ -414,17 +600,38 @@ canvas.pixelated {
   color-scheme: dark;
 }
 
-/* Respect reduced-motion users */
+/* Respect reduced-motion users, with a manual override: the hero MOTION
+   toggle sets html[data-motion]. `on` restores motion even when the OS
+   requests reduced motion; `off` (or an unset attr under OS reduce) kills
+   all brand motion. */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-  .logo-float,
-  .logo-float-mini,
-  .brand-blink,
-  .brand-glow,
-  .brand-shine,
-  .brand-word > span {
+  html:not([data-motion="on"]) .logo-float,
+  html:not([data-motion="on"]) .logo-float-mini,
+  html:not([data-motion="on"]) .logo-bounce,
+  html:not([data-motion="on"]) .brand-swim,
+  html:not([data-motion="on"]) .brand-breathe,
+  html:not([data-motion="on"]) .brand-glow,
+  html:not([data-motion="on"]) .brand-shine,
+  html:not([data-motion="on"]) .brand-bubbles > i,
+  html:not([data-motion="on"]) .brand-water > i,
+  html:not([data-motion="on"]) .brand-word > span {
     animation: none;
   }
+}
+
+html[data-motion="off"] .logo-float,
+html[data-motion="off"] .logo-float-mini,
+html[data-motion="off"] .logo-bounce,
+html[data-motion="off"] .brand-swim,
+html[data-motion="off"] .brand-breathe,
+html[data-motion="off"] .brand-glow,
+html[data-motion="off"] .brand-shine,
+html[data-motion="off"] .brand-bubbles > i,
+html[data-motion="off"] .brand-water > i,
+html[data-motion="off"] .brand-word > span,
+html[data-motion="off"] .cursor-blink {
+  animation: none;
 }

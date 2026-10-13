@@ -50,6 +50,11 @@ export default function RootLayout({
             __html: `(function(){try{var t=localStorage.getItem('ohgo-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme='dark';}})();`,
           }}
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var m=localStorage.getItem('ohgo-motion');if(m!=='on'&&m!=='off'){m=window.matchMedia('(prefers-reduced-motion: reduce)').matches?'off':'on';}document.documentElement.dataset.motion=m;}catch(e){document.documentElement.dataset.motion='on';}})();`,
+          }}
+        />
       </head>
       <body>{children}</body>
     </html>
