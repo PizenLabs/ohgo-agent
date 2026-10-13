@@ -1,0 +1,240 @@
+@import "tailwindcss";
+
+/* Design tokens as static Tailwind v4 theme — replaces Tailwind CDN JIT
+   (the CDN ships a ~100KB+ runtime compiler + observes the DOM; this
+   compiles once at build time, zero runtime cost). */
+@theme {
+  --color-bg-dark: #0d1117;
+  --color-panel-dark: #161b22;
+  --color-border-pixel: #30363d;
+  --color-ask-teal: #2dd4bf;
+  --color-fuzz-magenta: #f43f5e;
+  --color-build-blue: #3b82f6;
+  --color-pixel-green: #10b981;
+  --color-pixel-amber: #f59e0b;
+  --font-pixel: "VT323", monospace;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+:root {
+  --active-accent: #2dd4bf;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #0d1117;
+  color: #c9d1d9;
+  font-family: "JetBrains Mono", monospace;
+  image-rendering: pixelated;
+  overflow-x: hidden;
+}
+
+/* Scanline overlay: single fixed layer, compositor-friendly.
+   Original re-painted a full-viewport gradient every frame alongside
+   canvas; `contain: strict` + static gradient keeps it off the main thread. */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+  background-size: 100% 4px;
+  z-index: 50;
+  opacity: 0.6;
+  contain: strict;
+}
+
+/* Pixel borders & shadows — unchanged visual logic */
+.pixel-box {
+  background-color: #161b22;
+  border: 2px solid #30363d;
+  box-shadow:
+    4px 4px 0px 0px #010409,
+    inset -2px -2px 0px 0px #010409,
+    inset 2px 2px 0px 0px #21262d;
+  position: relative;
+}
+
+/* transform-only hover: stays on compositor thread, no layout thrash */
+.pixel-box-interactive {
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  will-change: transform;
+}
+
+.pixel-box-interactive:hover {
+  transform: translate(-2px, -2px);
+  box-shadow:
+    6px 6px 0px 0px #010409,
+    inset -2px -2px 0px 0px #010409,
+    inset 2px 2px 0px 0px #30363d;
+}
+
+.pixel-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "VT323", monospace;
+  font-size: 1.25rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.4rem 1rem;
+  border: 2px solid #30363d;
+  background: #21262d;
+  color: #f0f6fc;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 2px 2px 0px 0px #000;
+}
+
+.pixel-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px 0px #000;
+}
+
+.pixel-btn-ask {
+  border-color: #2dd4bf;
+  color: #2dd4bf;
+}
+.pixel-btn-ask.active,
+.pixel-btn-ask:hover {
+  background: #2dd4bf;
+  color: #0d1117;
+  box-shadow: 0 0 10px rgba(45, 212, 191, 0.4);
+}
+
+.pixel-btn-fuzz {
+  border-color: #f43f5e;
+  color: #f43f5e;
+}
+.pixel-btn-fuzz.active,
+.pixel-btn-fuzz:hover {
+  background: #f43f5e;
+  color: #0d1117;
+  box-shadow: 0 0 10px rgba(244, 63, 94, 0.4);
+}
+
+.pixel-btn-build {
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+.pixel-btn-build.active,
+.pixel-btn-build:hover {
+  background: #3b82f6;
+  color: #0d1117;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0d1117;
+  border-left: 1px solid #30363d;
+}
+::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border: 1px solid #21262d;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #484f58;
+}
+
+.glow-ask {
+  box-shadow: 0 0 15px rgba(45, 212, 191, 0.25);
+}
+.glow-fuzz {
+  box-shadow: 0 0 15px rgba(244, 63, 94, 0.25);
+}
+.glow-build {
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.25);
+}
+
+/* Cursor blink kept as opacity steps — cheap, no layout */
+.cursor-blink {
+  display: inline-block;
+  width: 8px;
+  height: 16px;
+  background-color: var(--active-accent);
+  animation: blink 1s step-end infinite;
+  vertical-align: middle;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.pixel-grid-bg {
+  background-size: 32px 32px;
+  background-image:
+    linear-gradient(to right, rgba(48, 54, 61, 0.2) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(48, 54, 61, 0.2) 1px, transparent 1px);
+}
+
+/* Crisp pixels without GPU smoothing cost.
+   crisp-edges first for older Firefox; pixelated (standard) wins where supported. */
+img.pixelated,
+canvas.pixelated {
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+}
+
+/* Pufferfish brand drift: slow bob + side sway + slight tilt.
+   Compositor-only transform, no layout thrash. Brand mark stays fixed
+   (no workspace tint); motion is decorative only. */
+@keyframes logo-float {
+  0%,
+  100% {
+    transform: translate(0, -8px) rotate(-3deg);
+  }
+  25% {
+    transform: translate(10px, -3px) rotate(2deg);
+  }
+  50% {
+    transform: translate(0, 8px) rotate(3deg);
+  }
+  75% {
+    transform: translate(-10px, -2px) rotate(-2deg);
+  }
+}
+
+@keyframes logo-float-mini {
+  0%,
+  100% {
+    transform: translate(0, -2px) rotate(-1.5deg);
+  }
+  50% {
+    transform: translate(0, 2px) rotate(1.5deg);
+  }
+}
+
+.logo-float {
+  animation: logo-float 5s ease-in-out infinite;
+  will-change: transform;
+}
+
+.logo-float-mini {
+  animation: logo-float-mini 3.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Respect reduced-motion users */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .logo-float,
+  .logo-float-mini {
+    animation: none;
+  }
+}
