@@ -78,8 +78,8 @@ jobs:
         env:
           # Project Pages serves under /<repo>; this feeds both `basePath` in
           # next.config.mjs and `BASE_PATH` in lib/base-path.ts so `next/image`
-          # src and metadata icons resolve to /ohgo-web/... instead of /...
-          NEXT_PUBLIC_BASE_PATH: /ohgo-web
+          # src and metadata icons resolve to /ohgo-agent/... instead of /...
+          NEXT_PUBLIC_BASE_PATH: /ohgo-agent
       - name: Add .nojekyll (keep _next servable on Pages)
         run: touch ./out/.nojekyll
       - name: Upload artifact

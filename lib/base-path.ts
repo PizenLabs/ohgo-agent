@@ -11,7 +11,7 @@
  *
  * Build wiring:
  * - `next.config.mjs` reads the same env var at build time for `basePath`.
- * - `.github/workflows/nextjs.yml` sets `NEXT_PUBLIC_BASE_PATH=/ohgo-web`.
+ * - `.github/workflows/nextjs.yml` sets `NEXT_PUBLIC_BASE_PATH=/ohgo-agent`.
  * - Local dev leaves it unset → `""`.
  */
 function normalize(value: string | undefined): string {

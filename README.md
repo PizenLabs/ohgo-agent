@@ -1,4 +1,4 @@
-# Ohgo Web — Next.js port of the Human-Controlled Agent Runtime landing page
+# Ohgo Agent — Next.js port of the Human-Controlled Agent Runtime landing page
 
 Converted from `ohgo_human_controlled_agent_runtime.html` (single-file Tailwind CDN prototype).
 

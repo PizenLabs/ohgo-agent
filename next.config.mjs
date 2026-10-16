@@ -10,7 +10,7 @@ const nextConfig = {
   // GitHub Project Pages serves under /<repo>; `basePath` prefixes routing +
   // `_next` assets. Per basePath.md, `next/image` src still needs a manual
   // prefix (see lib/base-path.ts) — this only covers framework-owned URLs.
-  // Empty locally, `/ohgo-web` in Actions (workflow sets NEXT_PUBLIC_BASE_PATH).
+  // Empty locally, `/ohgo-agent` in Actions (workflow sets NEXT_PUBLIC_BASE_PATH).
   // NOTE: keep this an explicit `key: value` pair, NOT the `basePath,`
   // shorthand — actions/configure-pages' config injector (if ever re-enabled)
   // replaces the value identifier in place and would corrupt a shorthand
@@ -19,7 +19,7 @@ const nextConfig = {
   // Static export has no Image Optimization server (see static-exports.md
   // "Unsupported Features"); serve SVGs/public assets as-is. Keeping the
   // value here (instead of configure-pages injection) makes local
-  // `NEXT_PUBLIC_BASE_PATH=/ohgo-web next build` reproduce Pages faithfully.
+  // `NEXT_PUBLIC_BASE_PATH=/ohgo-agent next build` reproduce Pages faithfully.
   images: { unoptimized: true },
 };
 

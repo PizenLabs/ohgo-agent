@@ -94,7 +94,7 @@ export default function HomeClient() {
             >
               $sup QUERY
             </button>
-            <a href="https://github.com/PizenLabs/ohgo-web" target="_blank" rel="noreferrer" className="pixel-btn text-xs !py-1 !px-2.5">
+            <a href="https://github.com/PizenLabs/ohgo-agent" target="_blank" rel="noreferrer" className="pixel-btn text-xs !py-1 !px-2.5">
               GITHUB
             </a>
           </div>
