@@ -23,7 +23,7 @@ interface BrandStyle extends CSSProperties {
  * - `.brand-swim` — fast tail-wag shimmy, tail-side origin (hero only)
  * - `.brand-breathe` — slow belly breathe scale (replaces whole-fish squash)
  * - img `.brand-glow` — accent-tinted drop-shadow pulse (filter only)
- * - `.brand-shine` — diagonal light sweep, clipped to the mark
+ * - `.brand-dew` — subtle water droplets glinting on the mark (hero only)
  * - `.brand-bubbles` — pixel bubbles from the mouth (hero only)
  *
  * Mini header is static (no drift/glow) so chrome stays calm.
@@ -47,7 +47,13 @@ function LogoBrand({ variant = "mini", accent }: LogoBrandProps) {
               className={`pixelated${isMini ? "" : " brand-glow h-auto w-full max-w-[330px]"}`}
               preload
             />
-            {!isMini && <span className="brand-shine" aria-hidden />}
+            {!isMini && (
+              <span className="brand-dew" aria-hidden>
+                <i />
+                <i />
+                <i />
+              </span>
+            )}
             {!isMini && (
               <span className="brand-bubbles" aria-hidden>
                 <i />

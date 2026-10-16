@@ -302,7 +302,7 @@ canvas.pixelated {
    .brand-swim    → fast tail-wag shimmy (rotate/skew, tail-side origin)
    .brand-breathe → slow belly breathe (subtle scale, replaces whole-fish squash)
    .brand-glow    → accent-tinted drop-shadow pulse (filter)
-   .brand-shine   → diagonal light sweep, clipped to the mark
+   .brand-dew     → subtle water droplets glinting on the mark (hero only)
    .brand-bubbles → pixel bubbles rising from the mouth (hero only)
    .brand-word    → per-letter idle wave on the OHGO wordmark
    Periods are co-prime-ish (7s / 2.2s / 3.4s / 4.2s) so layers never
@@ -400,37 +400,74 @@ canvas.pixelated {
   }
 }
 
-.brand-shine {
+/* Subtle water droplets beading on the mark (hero only). Each <i> is a
+   small rounded glint; opacity + transform only so it stays on the
+   compositor. Max opacity 0.35 keeps it calmer than the old light sweep. */
+.brand-dew {
   position: absolute;
-  top: -20%;
-  bottom: -20%;
-  left: 0;
-  width: 28%;
+  inset: 0;
   pointer-events: none;
-  background: linear-gradient(
-    100deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.55) 50%,
-    transparent 100%
-  );
-  mix-blend-mode: screen;
-  transform: translateX(-160%) skewX(-18deg);
-  animation: brand-shine 4.6s ease-in-out infinite;
-  will-change: transform;
 }
 
-@keyframes brand-shine {
+.brand-dew > i {
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle at 32% 30%,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.32) 38%,
+    rgba(255, 255, 255, 0.08) 62%,
+    transparent 72%
+  );
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.22);
+  opacity: 0;
+  animation: brand-dew 5.8s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.brand-dew > i:nth-child(1) {
+  left: 34%;
+  top: 30%;
+  width: 7px;
+  height: 7px;
+}
+
+.brand-dew > i:nth-child(2) {
+  left: 57%;
+  top: 62%;
+  width: 5px;
+  height: 5px;
+  animation-delay: 1.9s;
+}
+
+.brand-dew > i:nth-child(3) {
+  left: 45%;
+  top: 46%;
+  width: 4px;
+  height: 4px;
+  animation-delay: 3.7s;
+}
+
+@keyframes brand-dew {
   0%,
-  55% {
-    transform: translateX(-160%) skewX(-18deg);
+  100% {
+    transform: scale(0.6) translateY(0);
     opacity: 0;
   }
-  62% {
-    opacity: 1;
+  25% {
+    transform: scale(0.9) translateY(1px);
+    opacity: 0.35;
   }
-  85%,
-  100% {
-    transform: translateX(480%) skewX(-18deg);
+  50% {
+    transform: scale(1) translateY(2px);
+    opacity: 0.16;
+  }
+  70% {
+    transform: scale(0.95) translateY(1px);
+    opacity: 0.28;
+  }
+  85% {
+    transform: scale(0.7) translateY(0);
     opacity: 0;
   }
 }
@@ -614,7 +651,7 @@ canvas.pixelated {
   html:not([data-motion="on"]) .brand-swim,
   html:not([data-motion="on"]) .brand-breathe,
   html:not([data-motion="on"]) .brand-glow,
-  html:not([data-motion="on"]) .brand-shine,
+  html:not([data-motion="on"]) .brand-dew > i,
   html:not([data-motion="on"]) .brand-bubbles > i,
   html:not([data-motion="on"]) .brand-water > i,
   html:not([data-motion="on"]) .brand-word > span {
@@ -628,7 +665,7 @@ html[data-motion="off"] .logo-bounce,
 html[data-motion="off"] .brand-swim,
 html[data-motion="off"] .brand-breathe,
 html[data-motion="off"] .brand-glow,
-html[data-motion="off"] .brand-shine,
+html[data-motion="off"] .brand-dew > i,
 html[data-motion="off"] .brand-bubbles > i,
 html[data-motion="off"] .brand-water > i,
 html[data-motion="off"] .brand-word > span,
