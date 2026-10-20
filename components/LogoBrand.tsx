@@ -22,7 +22,7 @@ interface BrandStyle extends CSSProperties {
  * - outer `.brand-float logo-bounce` — up-down bounce on hero (right side)
  * - `.brand-swim` — fast tail-wag shimmy, tail-side origin (hero only)
  * - `.brand-breathe` — slow belly breathe scale (replaces whole-fish squash)
- * - img `.brand-glow` — accent-tinted drop-shadow pulse (filter only)
+ * - img `.brand-glow` — accent-tinted halo, static drop-shadow + opacity pulse
  * - `.brand-dew` — subtle water droplets glinting on the mark (hero only)
  * - `.brand-bubbles` — pixel bubbles from the mouth (hero only)
  *
@@ -44,9 +44,22 @@ function LogoBrand({ variant = "mini", accent }: LogoBrandProps) {
               alt="OHGO logo"
               width={isMini ? 48 : 330}
               height={isMini ? 32 : 220}
-              className={`pixelated${isMini ? "" : " brand-glow h-auto w-full max-w-[330px]"}`}
+              className={`pixelated${isMini ? "" : " h-auto w-full max-w-[330px]"}`}
               preload
             />
+            {!isMini && (
+              // Glow twin: same bitmap (already preloaded/cached), painted
+              // behind the mark. Only its drop-shadow halo escapes, and only
+              // its opacity animates — see .brand-glow in globals.css.
+              <Image
+                src={`${BASE_PATH}/ohgo-logo-pixel.svg`}
+                alt=""
+                aria-hidden
+                width={330}
+                height={220}
+                className="pixelated brand-glow"
+              />
+            )}
             {!isMini && (
               <span className="brand-dew" aria-hidden>
                 <i />

@@ -106,10 +106,11 @@ footer {
   position: relative;
 }
 
-/* transform-only hover: stays on compositor thread, no layout thrash */
+/* transform-only hover: stays on compositor thread, no layout thrash.
+   No `will-change` here: these cards only move on hover, so a permanent
+   layer would reserve a full-size backing store for the page's lifetime. */
 .pixel-box-interactive {
   transition: transform 0.1s ease, box-shadow 0.1s ease;
-  will-change: transform;
 }
 
 .pixel-box-interactive:hover {
@@ -256,7 +257,6 @@ canvas.pixelated {
 
 .logo-bounce {
   animation: logo-bounce 1.8s ease-in-out infinite;
-  will-change: transform;
 }
 
 /* Pufferfish brand drift: slow bob + side sway + slight tilt. */
@@ -288,12 +288,10 @@ canvas.pixelated {
 
 .logo-float {
   animation: logo-float 7s cubic-bezier(0.45, 0.05, 0.35, 1) infinite;
-  will-change: transform;
 }
 
 .logo-float-mini {
   animation: logo-float-mini 4s ease-in-out infinite;
-  will-change: transform;
 }
 
 /* ---- Animated brand mark -------------------------------------------
@@ -320,7 +318,6 @@ canvas.pixelated {
   display: inline-flex;
   transform-origin: 18% 55%;
   animation: brand-swim 2.2s ease-in-out infinite;
-  will-change: transform;
 }
 
 @keyframes brand-swim {
@@ -344,7 +341,6 @@ canvas.pixelated {
   display: inline-flex;
   overflow: hidden;
   animation: brand-breathe 3.4s ease-in-out infinite;
-  will-change: transform;
 }
 
 .brand-breathe-static {
@@ -371,33 +367,44 @@ canvas.pixelated {
   }
 }
 
+/* Glow pulse. The drop-shadow is rasterised once; only `opacity` animates,
+   so the pulse runs on the compositor. Animating `filter` instead
+   re-rasterised the 330px mark every frame — a full style + layerize pass
+   60x/second while the page sat idle. `.brand-glow` is a duplicate mark
+   painted *behind* the real one (z-index 0 vs 1); the duplicate itself is
+   hidden, only its halo escapes.
+   No `will-change`: an opacity animation already promotes the copy, and a
+   permanent hint would keep the layer alive under reduced motion. */
 .brand-glow {
-  animation: brand-glow 4.2s ease-in-out infinite;
-  will-change: filter;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 0 9px var(--brand-accent));
+  opacity: 0.4;
+  animation: brand-glow-pulse 4.2s ease-in-out infinite;
 }
 
-@keyframes brand-glow {
+.brand-breathe > img:not(.brand-glow) {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes brand-glow-pulse {
   0%,
   100% {
-    filter: drop-shadow(0 0 3px var(--brand-accent));
+    opacity: 0.4;
   }
   50% {
-    filter: drop-shadow(0 0 10px var(--brand-accent));
+    opacity: 1;
   }
 }
 
 [data-theme="light"] .brand-glow {
-  animation-name: brand-glow-light;
-}
-
-@keyframes brand-glow-light {
-  0%,
-  100% {
-    filter: drop-shadow(0 0 2px var(--brand-accent));
-  }
-  50% {
-    filter: drop-shadow(0 0 9px var(--brand-accent));
-  }
+  filter: drop-shadow(0 0 7px var(--brand-accent));
 }
 
 /* Subtle water droplets beading on the mark (hero only). Each <i> is a
@@ -422,7 +429,6 @@ canvas.pixelated {
   box-shadow: 0 0 4px rgba(255, 255, 255, 0.22);
   opacity: 0;
   animation: brand-dew 5.8s ease-in-out infinite;
-  will-change: transform, opacity;
 }
 
 .brand-dew > i:nth-child(1) {
@@ -490,7 +496,6 @@ canvas.pixelated {
   background: var(--brand-accent);
   opacity: 0;
   animation: brand-bubble 2.8s linear infinite;
-  will-change: transform, opacity;
 }
 
 .brand-bubbles > i:nth-child(2) {
@@ -542,7 +547,6 @@ canvas.pixelated {
   );
   opacity: 0.32;
   animation: brand-water-flow 3.2s linear infinite;
-  will-change: transform;
 }
 
 .brand-water > i:first-child {
@@ -607,7 +611,20 @@ canvas.pixelated {
 .brand-word > span {
   display: inline-block;
   animation: brand-letter 3.2s ease-in-out infinite;
-  will-change: transform;
+}
+
+/* Pause the hero's decorative loops once the mark is scrolled out of view.
+   CSS animations keep ticking style/lifecycle work every frame for the whole
+   session otherwise; the class is toggled by an IntersectionObserver in
+   HomeClient (no React state, so scrolling stays render-free). */
+.brand-hold .logo-bounce,
+.brand-hold .brand-swim,
+.brand-hold .brand-breathe,
+.brand-hold .brand-glow,
+.brand-hold .brand-dew > i,
+.brand-hold .brand-bubbles > i,
+.brand-hold .brand-water > i {
+  animation-play-state: paused;
 }
 
 .brand-word > span:nth-child(2) {

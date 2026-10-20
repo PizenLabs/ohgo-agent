@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { WORKSPACE_DATA, WORKSPACE_KEYS, type WorkspaceKey } from "@/lib/workspace";
 import TerminalSimulator from "./TerminalSimulator";
 import ArchFlow from "./ArchFlow";
@@ -30,6 +30,19 @@ export default function HomeClient() {
     setMotionOn(document.documentElement.dataset.motion !== "off");
   }, []);
   const data = WORKSPACE_DATA[workspace];
+
+  // Pause the hero's CSS loops while it is off-screen. Toggling the class on
+  // the DOM (instead of state) avoids re-rendering the whole page mid-scroll.
+  const heroMotionRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = heroMotionRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(([entry]) => {
+      el.classList.toggle("brand-hold", !entry.isIntersecting);
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   const switchWorkspace = useCallback((ws: WorkspaceKey) => setWorkspace(ws), []);
   const openSup = useCallback((q = "") => {
@@ -169,7 +182,7 @@ export default function HomeClient() {
                 OHGO_{workspace}
               </div>
 
-              <div className="my-6 relative flex justify-center items-center w-full">
+              <div ref={heroMotionRef} className="my-6 relative flex justify-center items-center w-full">
                 <div className="brand-water" aria-hidden>
                   <i />
                   <i />
