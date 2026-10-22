@@ -97,6 +97,7 @@ export default function HomeClient() {
             <a href="#simulator" className="text-[var(--app-muted)] hover:text-ask-teal transition-colors">TERMINAL SIMULATOR</a>
             <a href="#architecture" className="text-[var(--app-muted)] hover:text-ask-teal transition-colors">ARCHITECTURE</a>
             <a href="#invariants" className="text-[var(--app-muted)] hover:text-ask-teal transition-colors">INVARIANTS</a>
+            <a href="#intent" className="text-[var(--app-muted)] hover:text-ask-teal transition-colors">INTENT</a>
           </nav>
 
           <div className="flex items-center space-x-2">
@@ -107,7 +108,7 @@ export default function HomeClient() {
             >
               $sup QUERY
             </button>
-            <a href="https://github.com/PizenLabs/ohgo-agent" target="_blank" rel="noreferrer" className="pixel-btn text-xs !py-1 !px-2.5">
+            <a href="https://github.com/PizenLabs/ohgo" target="_blank" rel="noreferrer" className="pixel-btn text-xs !py-1 !px-2.5">
               GITHUB
             </a>
           </div>
@@ -346,6 +347,7 @@ export default function HomeClient() {
               { t: "I6 & I17. EPHEMERAL $SUP", tag: "SUPPORT", cls: "text-build-blue", b: "$sup opens a quick reference query layer on the SUP model role. It never alters main task history, persistent context, or workspace state." },
               { t: "I8 & I10. SESSION TRUTH", tag: "PERSISTENCE", cls: "text-pixel-green", b: "Sessions retain resolved effective models across restarts in ~/.ohgo/sessions.db. Unfinished states resume truthfully; unknown stays unknown." },
               { t: "I11. PROJECT IDENTITY", tag: "METADATA", cls: "text-pixel-amber", b: "<root>/.ohgo/project.yml establishes stable project identification without duplicating global session storage databases." },
+              { t: "I21-I26. INTENT ROUTING", tag: "AUTHORITY", cls: "text-fuzz-magenta", b: "Each turn classified READ/EXECUTE/INVESTIGATE by a deterministic, model-free classifier. Delegation only narrows authority; ambiguity resolves downward to READ." },
               { t: "I18. AUDIT-FIRST SEAMS", tag: "ENGINE", cls: "text-[var(--app-muted)]", b: "Existing execution engine is preserved. Architectural changes occur only at defined seams through audit, minimal change, and verification." },
             ].map((c) => (
               <div key={c.t} className="pixel-box p-4 bg-panel-dark space-y-2">
@@ -358,11 +360,67 @@ export default function HomeClient() {
             ))}
           </div>
         </section>
+
+        {/* 05 Intent-aware turns & completion (compact) */}
+        <section id="intent" className="space-y-6 pt-4 pb-8 scroll-mt-20">
+          <div className="border-b-2 border-border-pixel pb-3">
+            <h2 className="font-pixel text-3xl text-[var(--app-ink)] tracking-wide">05. INTENT-AWARE TURNS &amp; COMPLETION</h2>
+            <p className="text-xs font-mono text-[var(--app-muted)]">Authority is derived per turn; completion is a state transition, not a stop reason.</p>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="pixel-box p-5 bg-panel-dark space-y-2">
+              <div className="text-xs font-mono text-[var(--app-faint)] uppercase tracking-wider">Transition matrix</div>
+              <div className="font-mono text-[11px] space-y-1 text-[var(--app-muted)]">
+                <div className="grid grid-cols-3 gap-2 font-bold text-[var(--app-ink)] border-b border-border-pixel pb-1">
+                  <span>ACTIVE</span><span>INTENT</span><span>RESULT</span>
+                </div>
+                {[
+                  ["ASK", "READ", "ASK"],
+                  ["ASK", "EXECUTE", "REFUSED → /build"],
+                  ["ASK", "INVESTIGATE", "REFUSED → /fuzz"],
+                  ["BUILD", "READ", "ASK semantics, BUILD stays"],
+                  ["BUILD", "EXECUTE", "BUILD"],
+                  ["BUILD", "INVESTIGATE", "FUZZ semantics, BUILD stays"],
+                  ["FUZZ", "READ", "ASK semantics, FUZZ stays"],
+                  ["FUZZ", "INVESTIGATE", "FUZZ"],
+                  ["FUZZ", "EXECUTE", "REFUSED → /build"],
+                ].map(([a, i, r]) => (
+                  <div key={`${a}-${i}`} className="grid grid-cols-3 gap-2">
+                    <span className="text-ask-teal">{a}</span>
+                    <span className="text-pixel-amber">{i}</span>
+                    <span className="text-[var(--app-muted)]">{r}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="pixel-box p-5 bg-panel-dark space-y-2">
+              <div className="text-xs font-mono text-[var(--app-faint)] uppercase tracking-wider">Completion verdicts</div>
+              <div className="font-mono text-[11px] space-y-1 text-[var(--app-muted)]">
+                {[
+                  { v: "COMPLETED", c: "text-pixel-green" },
+                  { v: "NEEDS_REVIEW", c: "text-pixel-amber" },
+                  { v: "PAUSED", c: "text-build-blue" },
+                  { v: "FAILED", c: "text-red-400" },
+                  { v: "CANCELLED", c: "text-[var(--app-faint)]" },
+                ].map((x) => (
+                  <div key={x.v}><span className={`${x.c} font-bold`}>{x.v}</span></div>
+                ))}
+              </div>
+              <p className="text-[10px] font-mono text-[var(--app-faint)] pt-2 border-t border-border-pixel">
+                ohgo run exits 0 / 2 / 3 / 1 / 130. Delegation only narrows authority; the UI projects <span className="text-[var(--app-ink)]">build · ask/read</span> for the turn, then clears it.
+              </p>
+            </div>
+          </div>
+        </section>
       </main>
 
       <footer className="border-t-2 border-border-pixel bg-panel-dark py-6 text-xs font-mono text-[var(--app-faint)]">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div>OHGO Core Architecture Contract v1 — Human-Controlled Agent Runtime</div>
+          <div className="flex flex-col sm:flex-row items-center gap-2">
+            <a href="https://pizenlabs.dev" target="_blank" rel="noreferrer" className="hover:text-[var(--app-ink)] transition-colors">© PizenLabs</a>
+            <span className="hidden sm:inline">·</span>
+            <span>LICENSE: Apache-2.0</span>
+          </div>
           <div className="flex space-x-4">
             <span>ASK: Teal</span>
             <span>FUZZ: Magenta</span>
