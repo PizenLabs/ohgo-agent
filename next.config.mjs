@@ -21,6 +21,9 @@ const nextConfig = {
   // value here (instead of configure-pages injection) makes local
   // `NEXT_PUBLIC_BASE_PATH=/ohgo-agent next build` reproduce Pages faithfully.
   images: { unoptimized: true },
+  // Emit `out/<route>/index.html` so GitHub Pages serves clean URLs
+  // (e.g. /info) instead of requiring the `.html` suffix.
+  trailingSlash: true,
 };
 
 export default nextConfig;

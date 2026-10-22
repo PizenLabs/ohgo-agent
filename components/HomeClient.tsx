@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { WORKSPACE_DATA, WORKSPACE_KEYS, type WorkspaceKey } from "@/lib/workspace";
 import TerminalSimulator from "./TerminalSimulator";
@@ -108,6 +109,9 @@ export default function HomeClient() {
             >
               $sup QUERY
             </button>
+            <Link href="/info" className="pixel-btn text-xs !py-1 !px-2.5">
+              INFO
+            </Link>
             <a href="https://github.com/PizenLabs/ohgo" target="_blank" rel="noreferrer" className="pixel-btn text-xs !py-1 !px-2.5">
               GITHUB
             </a>
@@ -333,31 +337,37 @@ export default function HomeClient() {
           <ArchFlow />
         </section>
 
-        {/* 04 Invariants (static — no JS) */}
+        {/* 04 Invariants (continuous horizontal marquee) */}
         <section id="invariants" className="space-y-6 pt-4 pb-8 scroll-mt-20">
           <div className="border-b-2 border-border-pixel pb-3">
             <h2 className="font-pixel text-3xl text-[var(--app-ink)] tracking-wide">04. CORE ARCHITECTURAL INVARIANTS</h2>
             <p className="text-xs font-mono text-[var(--app-muted)]">Non-negotiable rules governing runtime authority, sessions, and persistence.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 font-mono text-xs">
-            {[
-              { t: "I1-I4. THREE AUTHORITIES", tag: "RUNTIME", cls: "text-ask-teal", b: "Exactly three primary workspaces (ASK, FUZZ, BUILD). BUILD is the sole mutation authority. ASK & FUZZ can never mutate code." },
-              { t: "I5 & I14. MODEL UNTRUSTED", tag: "POLICY", cls: "text-fuzz-magenta", b: "Model output is untrusted proposal. The runtime capability policy enforces boundaries below the UI regardless of model intent or prompts." },
-              { t: "I6 & I17. EPHEMERAL $SUP", tag: "SUPPORT", cls: "text-build-blue", b: "$sup opens a quick reference query layer on the SUP model role. It never alters main task history, persistent context, or workspace state." },
-              { t: "I8 & I10. SESSION TRUTH", tag: "PERSISTENCE", cls: "text-pixel-green", b: "Sessions retain resolved effective models across restarts in ~/.ohgo/sessions.db. Unfinished states resume truthfully; unknown stays unknown." },
-              { t: "I11. PROJECT IDENTITY", tag: "METADATA", cls: "text-pixel-amber", b: "<root>/.ohgo/project.yml establishes stable project identification without duplicating global session storage databases." },
-              { t: "I21-I26. INTENT ROUTING", tag: "AUTHORITY", cls: "text-fuzz-magenta", b: "Each turn classified READ/EXECUTE/INVESTIGATE by a deterministic, model-free classifier. Delegation only narrows authority; ambiguity resolves downward to READ." },
-              { t: "I18. AUDIT-FIRST SEAMS", tag: "ENGINE", cls: "text-[var(--app-muted)]", b: "Existing execution engine is preserved. Architectural changes occur only at defined seams through audit, minimal change, and verification." },
-            ].map((c) => (
-              <div key={c.t} className="pixel-box p-4 bg-panel-dark space-y-2">
-                <div className={`${c.cls} font-bold flex items-center justify-between`}>
-                  <span>{c.t}</span>
-                  <span className="text-[10px] text-[var(--app-faint)]">{c.tag}</span>
+          <div className="invariant-marquee" aria-label="Core architectural invariants">
+            <div className="invariant-marquee-track">
+              {[0, 1].map((dup) => (
+                <div key={dup} className="invariant-marquee-group" aria-hidden={dup === 1 ? "true" : undefined}>
+                  {[
+                    { t: "I1-I4. THREE AUTHORITIES", tag: "RUNTIME", cls: "text-ask-teal", b: "Exactly three primary workspaces (ASK, FUZZ, BUILD). BUILD is the sole mutation authority. ASK & FUZZ can never mutate code." },
+                    { t: "I5 & I14. MODEL UNTRUSTED", tag: "POLICY", cls: "text-fuzz-magenta", b: "Model output is untrusted proposal. The runtime capability policy enforces boundaries below the UI regardless of model intent or prompts." },
+                    { t: "I6 & I17. EPHEMERAL $SUP", tag: "SUPPORT", cls: "text-build-blue", b: "$sup opens a quick reference query layer on the SUP model role. It never alters main task history, persistent context, or workspace state." },
+                    { t: "I8 & I10. SESSION TRUTH", tag: "PERSISTENCE", cls: "text-pixel-green", b: "Sessions retain resolved effective models across restarts in ~/.ohgo/sessions.db. Unfinished states resume truthfully; unknown stays unknown." },
+                    { t: "I11. PROJECT IDENTITY", tag: "METADATA", cls: "text-pixel-amber", b: "<root>/.ohgo/project.yml establishes stable project identification without duplicating global session storage databases." },
+                    { t: "I21-I26. INTENT ROUTING", tag: "AUTHORITY", cls: "text-fuzz-magenta", b: "Each turn classified READ/EXECUTE/INVESTIGATE by a deterministic, model-free classifier. Delegation only narrows authority; ambiguity resolves downward to READ." },
+                    { t: "I18. AUDIT-FIRST SEAMS", tag: "ENGINE", cls: "text-[var(--app-muted)]", b: "Existing execution engine is preserved. Architectural changes occur only at defined seams through audit, minimal change, and verification." },
+                  ].map((c) => (
+                    <div key={`${dup}-${c.t}`} className="pixel-box p-4 bg-panel-dark space-y-2 invariant-marquee-item font-mono text-xs">
+                      <div className={`${c.cls} font-bold flex items-center justify-between`}>
+                        <span>{c.t}</span>
+                        <span className="text-[10px] text-[var(--app-faint)]">{c.tag}</span>
+                      </div>
+                      <p className="text-[var(--app-muted)]">{c.b}</p>
+                    </div>
+                  ))}
                 </div>
-                <p className="text-[var(--app-muted)]">{c.b}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </section>
 

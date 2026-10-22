@@ -689,3 +689,38 @@ html[data-motion="off"] .brand-word > span,
 html[data-motion="off"] .cursor-blink {
   animation: none;
 }
+
+/* Invariants marquee: continuous right-to-left horizontal loop. */
+.invariant-marquee {
+  overflow: hidden;
+  width: 100%;
+  padding: 0.5rem 0;
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+.invariant-marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 1rem;
+  will-change: transform;
+  animation: invariant-marquee 40s linear infinite;
+}
+.invariant-marquee-group {
+  display: flex;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+.invariant-marquee-item {
+  width: 22rem;
+  flex-shrink: 0;
+}
+@keyframes invariant-marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion="on"]) .invariant-marquee-track { animation: none; }
+}
+html[data-motion="off"] .invariant-marquee-track { animation: none; }
+
+
