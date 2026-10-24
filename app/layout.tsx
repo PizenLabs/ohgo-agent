@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   // HTTP wire headers — no runtime code field carries category/description
   // on the wire.
   category: "agent runtime",
-  description: "A coding agent with a controlled runtime",
+  description: "A human-controlled agent runtime built for real-world codebases.",
   metadataBase: new URL("https://pizenlabs.dev/ohgo-agent"),
   icons: {
     icon: `${BASE_PATH}/ohgo-logo.svg`,
