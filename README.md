@@ -18,6 +18,7 @@ npm run dev
 - `components/MascotCanvas.tsx` — hero blob (exact frame-math port, single rAF)
 - `components/MiniMascotCanvas.tsx` — header mini blob (redrawn on workspace change, CSS bob)
 - `components/mascot-scene.ts` — pure scene computation (unit-parity-tested vs original)
+- `components/InstallBox.tsx` — install/quick-start command box with clipboard copy
 - `components/TerminalSimulator.tsx` — capability-policy simulator (capped buffer)
 - `components/ArchFlow.tsx` — artifact handoff explorer
 - `components/SupModal.tsx` — `$sup` ephemeral modal (code-split via `next/dynamic`)

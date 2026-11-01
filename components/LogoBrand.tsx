@@ -43,9 +43,13 @@ function LogoBrand({ variant = "mini", accent }: LogoBrandProps) {
               src={`${BASE_PATH}/ohgo-logo-pixel.svg`}
               alt="OHGO logo"
               width={isMini ? 48 : 330}
-              height={isMini ? 32 : 220}
+              // The source SVG is square (1254×1254), so both variants use
+              // square dimensions. A non-square attribute ratio makes the
+              // rendered height diverge from the attribute and Next warns.
+              height={isMini ? 48 : 330}
               className={`pixelated${isMini ? "" : " h-auto w-full max-w-[330px]"}`}
               preload
+              loading="eager"
             />
             {!isMini && (
               // Glow twin: same bitmap (already preloaded/cached), painted
@@ -56,8 +60,9 @@ function LogoBrand({ variant = "mini", accent }: LogoBrandProps) {
                 alt=""
                 aria-hidden
                 width={330}
-                height={220}
+                height={330}
                 className="pixelated brand-glow"
+                loading="eager"
               />
             )}
             {!isMini && (

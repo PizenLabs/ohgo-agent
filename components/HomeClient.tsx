@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { WORKSPACE_DATA, WORKSPACE_KEYS, type WorkspaceKey } from "@/lib/workspace";
 import TerminalSimulator from "./TerminalSimulator";
+import InstallBox from "./InstallBox";
 import ArchFlow from "./ArchFlow";
 import LogoBrand from "./LogoBrand";
 import ThemeToggle from "./ThemeToggle";
@@ -94,11 +95,12 @@ export default function HomeClient() {
           </div>
 
           <nav className="hidden md:flex items-center space-x-6 text-xs font-mono" aria-label="Sections">
+            <a href="#install" className="text-[var(--app-muted)] hover:text-ask-teal transition-colors">INSTALL</a>
             <a href="#workspaces" className="text-[var(--app-muted)] hover:text-ask-teal transition-colors">WORKSPACES</a>
             <a href="#simulator" className="text-[var(--app-muted)] hover:text-ask-teal transition-colors">TERMINAL SIMULATOR</a>
             <a href="#architecture" className="text-[var(--app-muted)] hover:text-ask-teal transition-colors">ARCHITECTURE</a>
             <a href="#invariants" className="text-[var(--app-muted)] hover:text-ask-teal transition-colors">INVARIANTS</a>
-            <a href="#intent" className="text-[var(--app-muted)] hover:text-ask-teal transition-colors">INTENT</a>
+            <a href="#intent" className="hidden xl:inline text-[var(--app-muted)] hover:text-ask-teal transition-colors">INTENT</a>
           </nav>
 
           <div className="flex items-center space-x-2">
@@ -219,6 +221,21 @@ export default function HomeClient() {
               </div>
             </div>
           </div>
+        </section>
+
+        {/* 00 Install — copyable command box sourced from the upstream README */}
+        <section id="install" className="space-y-5 pt-2 scroll-mt-20">
+          <div className="border-b-2 border-border-pixel pb-3 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+            <div>
+              <h2 className="font-pixel text-3xl text-[var(--app-ink)] tracking-wide">00. INSTALL</h2>
+              <p className="text-xs font-mono text-[var(--app-muted)]">
+                Pick a method and copy the exact command. The release script is SHA-256 verified before it installs.
+              </p>
+            </div>
+            <div className="text-xs font-mono text-[var(--app-faint)]">STATIC BINARY · CGO_ENABLED=0</div>
+          </div>
+
+          <InstallBox />
         </section>
 
         {/* 01 Workspaces (static — no JS) */}
