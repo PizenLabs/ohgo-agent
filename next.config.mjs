@@ -4,6 +4,11 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // Keep coding-agent upgrade reminders on the security policy: `next dev` /
+  // `next build` may surface a published advisory for the installed version.
+  experimental: {
+    agentUpgrade: "security",
+  },
   // Static export for GitHub Pages (`out/`). Per dist/docs/01-app/02-guides/static-exports.md
   // this is required — `next build` must emit `out/` for the upload-pages-artifact step.
   output: "export",
