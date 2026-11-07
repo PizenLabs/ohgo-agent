@@ -87,39 +87,40 @@ export default function InfoClient() {
       <div className="scanlines" aria-hidden />
 
       <header className="border-b-2 border-border-pixel bg-panel-dark/90 sticky top-0 z-40 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2.5 flex flex-wrap items-center justify-between gap-x-2 sm:gap-x-3 gap-y-1.5">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             <LogoBrand variant="mini" accent="#2dd4bf" />
-            <div>
-              <Link href="/" className="font-pixel text-2xl tracking-wider text-[var(--app-ink)] flex items-center gap-2">
+            <div className="min-w-0">
+              <Link href="/" className="font-pixel text-xl sm:text-2xl tracking-wider text-[var(--app-ink)] flex items-center gap-1.5 sm:gap-2 whitespace-nowrap">
                 <span className="brand-word" aria-label="OHGO">
                   <span>O</span><span>H</span><span>G</span><span>O</span>
                 </span>{" "}
-                <span className="text-xs font-mono px-1.5 py-0.5 bg-border-pixel/50 text-[var(--app-faint)] rounded-none border border-gray-600">
+                <span className="hidden sm:inline text-xs font-mono px-1.5 py-0.5 bg-border-pixel/50 text-[var(--app-faint)] rounded-none border border-gray-600">
                   v1.0
                 </span>
               </Link>
             </div>
           </div>
 
-          <nav className="hidden md:flex items-center space-x-6 text-xs font-mono" aria-label="Sections">
+          <nav className="hidden lg:flex items-center gap-4 xl:gap-6 text-xs font-mono" aria-label="Sections">
             <Link href="/" className="text-[var(--app-muted)] hover:text-ask-teal transition-colors">HOME</Link>
             <a href="#documentation" className="text-[var(--app-muted)] hover:text-ask-teal transition-colors">DOCUMENTATION</a>
             <Link href="/changelog" className="text-[var(--app-muted)] hover:text-ask-teal transition-colors">CHANGELOG</Link>
           </nav>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 ml-auto">
             <ThemeToggle />
             <button
               onClick={toggleMotion}
               aria-pressed={motionOn}
               title="Toggle brand motion"
-              className="pixel-btn text-xs !py-1 !px-2.5"
+              className="pixel-btn h-9 text-xs !px-2.5"
             >
-              MOTION: {motionOn ? "ON" : "OFF"}
+              MOTION<span className="hidden sm:inline">: {motionOn ? "ON" : "OFF"}</span>
             </button>
-            <a href="https://github.com/PizenLabs/ohgo" target="_blank" rel="noreferrer" className="pixel-btn text-xs !py-1 !px-2.5">
-              GITHUB
+            <a href="https://github.com/PizenLabs/ohgo" target="_blank" rel="noreferrer" aria-label="OHGO on GitHub" className="pixel-btn h-9 text-xs !px-2.5">
+              <span className="sm:hidden">GH</span>
+              <span className="hidden sm:inline">GITHUB</span>
             </a>
           </div>
         </div>

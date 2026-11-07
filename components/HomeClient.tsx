@@ -79,22 +79,22 @@ export default function HomeClient() {
       <div className="scanlines" aria-hidden />
 
       <header className="border-b-2 border-border-pixel bg-panel-dark/90 sticky top-0 z-40 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2.5 flex flex-wrap items-center justify-between gap-x-2 sm:gap-x-3 gap-y-1.5">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             <LogoBrand variant="mini" accent={data.color} />
-            <div>
-              <a href="#" className="font-pixel text-2xl tracking-wider text-[var(--app-ink)] flex items-center gap-2">
+            <div className="min-w-0">
+              <a href="#" className="font-pixel text-xl sm:text-2xl tracking-wider text-[var(--app-ink)] flex items-center gap-1.5 sm:gap-2 whitespace-nowrap">
                 <span className="brand-word" aria-label="OHGO">
                   <span>O</span><span>H</span><span>G</span><span>O</span>
                 </span>{" "}
-                <span className="text-xs font-mono px-1.5 py-0.5 bg-border-pixel/50 text-[var(--app-faint)] rounded-none border border-gray-600">
+                <span className="hidden sm:inline text-xs font-mono px-1.5 py-0.5 bg-border-pixel/50 text-[var(--app-faint)] rounded-none border border-gray-600">
                   v1.0
                 </span>
               </a>
             </div>
           </div>
 
-          <nav className="hidden md:flex items-center space-x-6 text-xs font-mono" aria-label="Sections">
+          <nav className="hidden lg:flex items-center gap-4 xl:gap-6 text-xs font-mono" aria-label="Sections">
             <a href="#install" className="text-[var(--app-muted)] hover:text-ask-teal transition-colors">INSTALL</a>
             <a href="#workspaces" className="text-[var(--app-muted)] hover:text-ask-teal transition-colors">WORKSPACES</a>
             <a href="#simulator" className="text-[var(--app-muted)] hover:text-ask-teal transition-colors">TERMINAL SIMULATOR</a>
@@ -103,19 +103,22 @@ export default function HomeClient() {
             <a href="#intent" className="hidden xl:inline text-[var(--app-muted)] hover:text-ask-teal transition-colors">INTENT</a>
           </nav>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 ml-auto">
             <ThemeToggle />
             <button
               onClick={() => openSup()}
-              className="pixel-btn text-xs !py-1 !px-2.5 text-pixel-amber border-pixel-amber hover:bg-pixel-amber/20"
+              className="pixel-btn h-9 text-xs !px-2.5 text-pixel-amber border-pixel-amber hover:bg-pixel-amber/20"
+              aria-label="$sup query"
             >
-              $sup QUERY
+              <span className="sm:hidden">$SUP</span>
+              <span className="hidden sm:inline">$sup QUERY</span>
             </button>
-            <Link href="/info" className="pixel-btn text-xs !py-1 !px-2.5">
+            <Link href="/info" className="pixel-btn h-9 text-xs !px-2.5">
               INFO
             </Link>
-            <a href="https://github.com/PizenLabs/ohgo" target="_blank" rel="noreferrer" className="pixel-btn text-xs !py-1 !px-2.5">
-              GITHUB
+            <a href="https://github.com/PizenLabs/ohgo" target="_blank" rel="noreferrer" aria-label="OHGO on GitHub" className="pixel-btn h-9 text-xs !px-2.5">
+              <span className="sm:hidden">GH</span>
+              <span className="hidden sm:inline">GITHUB</span>
             </a>
           </div>
         </div>
@@ -130,7 +133,7 @@ export default function HomeClient() {
               <span className="text-[var(--app-muted)]">HUMAN-CONTROLLED AGENT RUNTIME FOR REAL CODEBASES</span>
             </div>
 
-            <h1 className="font-pixel text-5xl sm:text-6xl text-[var(--app-ink)] tracking-wide leading-tight">
+            <h1 className="font-pixel text-4xl min-[380px]:text-5xl sm:text-6xl text-[var(--app-ink)] tracking-wide leading-tight">
               DYNAMIC PATH.
               <br />
               <span className="transition-colors duration-300" style={{ color: data.color }}>
@@ -155,7 +158,7 @@ export default function HomeClient() {
                     key={k}
                     onClick={() => switchWorkspace(k)}
                     aria-pressed={workspace === k}
-                    className={`pixel-btn ${BTN_CLASS[k]}${workspace === k ? " active" : ""}`}
+                    className={`pixel-btn ${BTN_CLASS[k]}${workspace === k ? " active" : ""} w-full sm:w-auto`}
                   >
                     {WORKSPACE_DATA[k].title}
                   </button>
@@ -163,7 +166,7 @@ export default function HomeClient() {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-3 pt-2 text-xs font-mono text-[var(--app-muted)] border-t border-border-pixel/60">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 pt-2 text-xs font-mono text-[var(--app-muted)] border-t border-border-pixel/60">
               <div>
                 <span className="text-[var(--app-faint)] block">AUTHORITY:</span>
                 <span className="font-semibold" style={{ color: data.color }}>{data.title}</span>
@@ -227,7 +230,7 @@ export default function HomeClient() {
         <section id="install" className="space-y-5 pt-2 scroll-mt-20">
           <div className="border-b-2 border-border-pixel pb-3 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
             <div>
-              <h2 className="font-pixel text-3xl text-[var(--app-ink)] tracking-wide">00. INSTALL</h2>
+              <h2 className="font-pixel text-2xl sm:text-3xl text-[var(--app-ink)] tracking-wide">00. INSTALL</h2>
               <p className="text-xs font-mono text-[var(--app-muted)]">
                 Pick a method and copy the exact command. The release script is SHA-256 verified before it installs.
               </p>
@@ -242,7 +245,7 @@ export default function HomeClient() {
         <section id="workspaces" className="space-y-6 pt-6 scroll-mt-20">
           <div className="border-b-2 border-border-pixel pb-3 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
             <div>
-              <h2 className="font-pixel text-3xl text-[var(--app-ink)] tracking-wide">01. THE THREE WORKSPACES</h2>
+              <h2 className="font-pixel text-2xl sm:text-3xl text-[var(--app-ink)] tracking-wide">01. THE THREE WORKSPACES</h2>
               <p className="text-xs font-mono text-[var(--app-muted)]">Architectural Invariant: Workspaces are runtime authority boundaries, not UI visual themes.</p>
             </div>
             <div className="text-xs font-mono text-[var(--app-faint)]">EXACTLY 3 PRIMARY WORKSPACES</div>
@@ -326,7 +329,7 @@ export default function HomeClient() {
         <section id="simulator" className="space-y-6 pt-4 scroll-mt-20">
           <div className="border-b-2 border-border-pixel pb-3 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
             <div>
-              <h2 className="font-pixel text-3xl text-[var(--app-ink)] tracking-wide">02. RUNTIME SIMULATOR &amp; TOOL ADMISSION</h2>
+              <h2 className="font-pixel text-2xl sm:text-3xl text-[var(--app-ink)] tracking-wide">02. RUNTIME SIMULATOR &amp; TOOL ADMISSION</h2>
               <p className="text-xs font-mono text-[var(--app-muted)]">Test how OHGO admits or denies tools below the UI based on Capability Policy.</p>
             </div>
             <div className="flex items-center gap-2">
@@ -347,7 +350,7 @@ export default function HomeClient() {
         <section id="architecture" className="space-y-6 pt-4 scroll-mt-20">
           <div className="border-b-2 border-border-pixel pb-3 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
             <div>
-              <h2 className="font-pixel text-3xl text-[var(--app-ink)] tracking-wide">03. ARCHITECTURE &amp; ARTIFACT HANDOFFS</h2>
+              <h2 className="font-pixel text-2xl sm:text-3xl text-[var(--app-ink)] tracking-wide">03. ARCHITECTURE &amp; ARTIFACT HANDOFFS</h2>
               <p className="text-xs font-mono text-[var(--app-muted)]">Cross-workspace workflows communicate using structured artifacts—never conversation inheritance.</p>
             </div>
           </div>
@@ -357,7 +360,7 @@ export default function HomeClient() {
         {/* 04 Invariants (continuous horizontal marquee) */}
         <section id="invariants" className="space-y-6 pt-4 pb-8 scroll-mt-20">
           <div className="border-b-2 border-border-pixel pb-3">
-            <h2 className="font-pixel text-3xl text-[var(--app-ink)] tracking-wide">04. CORE ARCHITECTURAL INVARIANTS</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-[var(--app-ink)] tracking-wide">04. CORE ARCHITECTURAL INVARIANTS</h2>
             <p className="text-xs font-mono text-[var(--app-muted)]">Non-negotiable rules governing runtime authority, sessions, and persistence.</p>
           </div>
 
@@ -391,7 +394,7 @@ export default function HomeClient() {
         {/* 05 Intent-aware turns & completion (compact) */}
         <section id="intent" className="space-y-6 pt-4 pb-8 scroll-mt-20">
           <div className="border-b-2 border-border-pixel pb-3">
-            <h2 className="font-pixel text-3xl text-[var(--app-ink)] tracking-wide">05. INTENT-AWARE TURNS &amp; COMPLETION</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-[var(--app-ink)] tracking-wide">05. INTENT-AWARE TURNS &amp; COMPLETION</h2>
             <p className="text-xs font-mono text-[var(--app-muted)]">Authority is derived per turn; completion is a state transition, not a stop reason.</p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

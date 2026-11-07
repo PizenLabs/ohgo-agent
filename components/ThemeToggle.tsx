@@ -37,7 +37,7 @@ function ThemeToggle() {
       aria-pressed={isLight}
       aria-label={isLight ? "Switch to dark mode" : "Switch to light mode"}
       title={isLight ? "Switch to dark mode" : "Switch to light mode"}
-      className="pixel-btn text-xs !py-1 !px-2.5"
+      className="pixel-btn h-9 w-9 shrink-0 text-xs !px-0 sm:w-auto sm:!px-2.5"
     >
       <span aria-hidden className="inline-flex items-center gap-1.5">
         {isLight ? (
@@ -50,7 +50,7 @@ function ThemeToggle() {
             <path d="M9 3C6 3 4 6 4 9c0 3 2 5 5 5 1 0 2 0 3-1-2 0-4-2-4-5s2-5 4-5c-1-1-2 0-3 0z" />
           </svg>
         )}
-        {isLight ? "LIGHT" : "DARK"}
+        <span className="hidden sm:inline">{isLight ? "LIGHT" : "DARK"}</span>
       </span>
     </button>
   );

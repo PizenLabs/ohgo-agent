@@ -64,7 +64,9 @@ body {
   color: var(--app-muted);
   font-family: "JetBrains Mono", monospace;
   image-rendering: pixelated;
-  overflow-x: hidden;
+  /* `clip` prevents stray horizontal scroll without turning <body> into a
+     scroll container (which `hidden` does and can break sticky offsets). */
+  overflow-x: clip;
 }
 
 /* Smooth theme cross-fade on chrome only (not on animated brand layers). */
@@ -121,59 +123,67 @@ footer {
     inset 2px 2px 0px 0px var(--app-border);
 }
 
-.pixel-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "VT323", monospace;
-  font-size: 1.25rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  padding: 0.4rem 1rem;
-  border: 2px solid var(--app-border);
-  background: var(--app-panel-2);
-  color: var(--app-ink);
-  cursor: pointer;
-  user-select: none;
-  box-shadow: 2px 2px 0px 0px var(--app-shadow);
-}
+/* `components` layer (not unlayered) so Tailwind utilities such as
+   `text-xs` / `!px-*` on individual buttons still win. An unlayered rule
+   here silently beat every `text-xs` in the app, rendering 20px buttons
+   that wrapped and clipped on mobile. */
+@layer components {
+  .pixel-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "VT323", monospace;
+    font-size: 1.25rem;
+    line-height: 1.1;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    padding: 0.4rem 1rem;
+    border: 2px solid var(--app-border);
+    background: var(--app-panel-2);
+    color: var(--app-ink);
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 2px 2px 0px 0px var(--app-shadow);
+  }
 
-.pixel-btn:active {
-  transform: translate(2px, 2px);
-  box-shadow: 0px 0px 0px 0px var(--app-shadow);
-}
+  .pixel-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0px 0px 0px 0px var(--app-shadow);
+  }
 
-.pixel-btn-ask {
-  border-color: #2dd4bf;
-  color: #2dd4bf;
-}
-.pixel-btn-ask.active,
-.pixel-btn-ask:hover {
-  background: #2dd4bf;
-  color: #0d1117;
-  box-shadow: 0 0 10px rgba(45, 212, 191, 0.4);
-}
+  .pixel-btn-ask {
+    border-color: #2dd4bf;
+    color: #2dd4bf;
+  }
+  .pixel-btn-ask.active,
+  .pixel-btn-ask:hover {
+    background: #2dd4bf;
+    color: #0d1117;
+    box-shadow: 0 0 10px rgba(45, 212, 191, 0.4);
+  }
 
-.pixel-btn-fuzz {
-  border-color: #f43f5e;
-  color: #f43f5e;
-}
-.pixel-btn-fuzz.active,
-.pixel-btn-fuzz:hover {
-  background: #f43f5e;
-  color: #0d1117;
-  box-shadow: 0 0 10px rgba(244, 63, 94, 0.4);
-}
+  .pixel-btn-fuzz {
+    border-color: #f43f5e;
+    color: #f43f5e;
+  }
+  .pixel-btn-fuzz.active,
+  .pixel-btn-fuzz:hover {
+    background: #f43f5e;
+    color: #0d1117;
+    box-shadow: 0 0 10px rgba(244, 63, 94, 0.4);
+  }
 
-.pixel-btn-build {
-  border-color: #3b82f6;
-  color: #3b82f6;
-}
-.pixel-btn-build.active,
-.pixel-btn-build:hover {
-  background: #3b82f6;
-  color: #0d1117;
-  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+  .pixel-btn-build {
+    border-color: #3b82f6;
+    color: #3b82f6;
+  }
+  .pixel-btn-build.active,
+  .pixel-btn-build:hover {
+    background: #3b82f6;
+    color: #0d1117;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+  }
 }
 
 ::-webkit-scrollbar {
