@@ -11,8 +11,10 @@
  *
  * Build wiring:
  * - `next.config.mjs` reads the same env var at build time for `basePath`.
- * - `.github/workflows/nextjs.yml` sets `NEXT_PUBLIC_BASE_PATH=/ohgo-agent`.
+ * - The site is served from a custom-domain root (`CNAME`), so the workflow
+ *   leaves `NEXT_PUBLIC_BASE_PATH` unset → `""`.
  * - Local dev leaves it unset → `""`.
+ * - Falling back to Project Pages (`/<repo>/`) requires setting it to `/<repo>`.
  */
 function normalize(value: string | undefined): string {
   if (!value) return "";
