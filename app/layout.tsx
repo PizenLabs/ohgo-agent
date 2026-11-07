@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   // on the wire.
   category: "agent runtime",
   description: "A human-controlled agent runtime built for real-world codebases.",
-  metadataBase: new URL("https://pizenlabs.dev/ohgo-agent"),
+  metadataBase: new URL("https://ohgo.pizenlabs.dev"),
   icons: {
     icon: `${BASE_PATH}/ohgo-logo.svg`,
     apple: `${BASE_PATH}/ohgo-logo.svg`,
