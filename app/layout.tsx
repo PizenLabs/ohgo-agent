@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { VT323, JetBrains_Mono } from "next/font/google";
-import { BASE_PATH } from "@/lib/base-path";
 import "./globals.css";
 
 // next/font: self-hosted, zero render-blocking Google Fonts requests.
@@ -28,8 +27,14 @@ export const metadata: Metadata = {
   description: "A human-controlled agent runtime built for real-world codebases.",
   metadataBase: new URL("https://ohgo.pizenlabs.dev"),
   icons: {
-    icon: `${BASE_PATH}/ohgo-logo.svg`,
-    apple: `${BASE_PATH}/ohgo-logo.svg`,
+    icon: [
+      { url: "https://ohgo.pizenlabs.dev/favicon.ico", sizes: "any" },
+      { url: "https://ohgo.pizenlabs.dev/favicon-48x48.png", type: "image/png", sizes: "48x48" },
+      { url: "https://ohgo.pizenlabs.dev/favicon-192x192.png", type: "image/png", sizes: "192x192" },
+      { url: "https://ohgo.pizenlabs.dev/icon.svg", type: "image/svg+xml", sizes: "any" },
+    ],
+    apple: [{ url: "https://ohgo.pizenlabs.dev/apple-touch-icon.png", type: "image/png", sizes: "180x180" }],
+    shortcut: "https://ohgo.pizenlabs.dev/favicon.ico",
   },
 };
 

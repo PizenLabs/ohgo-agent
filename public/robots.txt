@@ -1,0 +1,17 @@
+# robots.txt for ohgo.pizenlabs.dev — allow favicon discovery
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: *
+Allow: /
+
+# Explicitly allow favicon assets (defensive if a disallow is added later)
+Allow: /favicon.ico
+Allow: /favicon-*.png
+Allow: /icon.svg
+Allow: /apple-touch-icon.png
+
+Sitemap: https://ohgo.pizenlabs.dev/sitemap.xml
