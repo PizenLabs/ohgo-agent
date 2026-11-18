@@ -7,6 +7,7 @@ import { WORKSPACE_DATA, WORKSPACE_KEYS, type WorkspaceKey } from "@/lib/workspa
 import TerminalSimulator from "./TerminalSimulator";
 import InstallBox from "./InstallBox";
 import ArchFlow from "./ArchFlow";
+import Providers from "./Providers";
 import LogoBrand from "./LogoBrand";
 import ThemeToggle from "./ThemeToggle";
 
@@ -101,6 +102,7 @@ export default function HomeClient() {
             <a href="#architecture" className="text-[var(--app-muted)] hover:text-ask-teal transition-colors">ARCHITECTURE</a>
             <a href="#invariants" className="text-[var(--app-muted)] hover:text-ask-teal transition-colors">INVARIANTS</a>
             <a href="#intent" className="hidden xl:inline text-[var(--app-muted)] hover:text-ask-teal transition-colors">INTENT</a>
+            <a href="#providers" className="hidden xl:inline text-[var(--app-muted)] hover:text-ask-teal transition-colors">PROVIDERS</a>
           </nav>
 
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 ml-auto">
@@ -442,6 +444,9 @@ export default function HomeClient() {
             </div>
           </div>
         </section>
+
+        {/* 06 Providers — subtle by design: registry breadth, not a pitch */}
+        <Providers />
       </main>
 
       <footer className="border-t-2 border-border-pixel bg-panel-dark py-6 text-xs font-mono text-[var(--app-faint)]">
